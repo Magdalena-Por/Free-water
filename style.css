@@ -1,0 +1,272 @@
+/* style.css */
+
+/* Definiowanie zmiennych kolorów dla łatwej zmiany */
+:root {
+    --primary-light-blue: #A1D6E2; /* Delikatny błękitny - akcenty, nagłówki */
+    --secondary-teal: #6BADC1;    /* Muted teal - hover, buttons */
+    --background-grey: #F5F8FA;    /* Bardzo jasny szaro-niebieski - tło strony */
+    --white: #FFFFFF;             /* Czysta biel - tło kart */
+    --dark-text: #333333;         /* Ciemny szary - główny tekst */
+    --medium-text: #666666;       /* Średni szary - opisy, lżejszy tekst */
+    --light-border: #E0E6EB;      /* Jasna ramka/linia */
+    --shadow-soft: rgba(0, 0, 0, 0.08); /* Miękki cień */
+    --shadow-strong: rgba(0, 0, 0, 0.15); /* Mocniejszy cień na hover */
+}
+
+/* Podstawowe resetowanie i style globalne */
+html {
+    box-sizing: border-box;
+}
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: 'Lato', sans-serif; /* Delikatniejszy i czytelniejszy font dla treści */
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-grey);
+    color: var(--dark-text);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased; /* Poprawa renderowania fontów */
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Header */
+header {
+    background-color: var(--white);
+    padding: 40px 20px;
+    box-shadow: 0 2px 10px var(--shadow-soft);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Quicksand', sans-serif; /* Nowoczesny, "lekki" font dla nagłówków */
+    font-weight: 700; /* Gruby dla wyróżnienia */
+    font-size: 2.8em;
+    color: var(--secondary-teal); /* Główny kolor akcentu */
+    margin-top: 0;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+}
+
+header p {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.2em;
+    color: var(--medium-text);
+}
+
+/* Główna zawartość */
+main {
+    flex-grow: 1; /* Rozciągnie main, pchając stopkę na dół */
+    padding-bottom: 40px; /* Dodatkowy padding na dole main */
+}
+
+/* Kontener mapy */
+#map {
+    height: 650px; /* Nieco wyższa mapa */
+    width: 90%;
+    max-width: 960px; /* Maksymalna szerokość mapy */
+    margin: 0 auto; /* Centrowanie */
+    border-radius: 15px; /* Większe zaokrąglenia */
+    box-shadow: 0 10px 30px var(--shadow-soft); /* Większy, miękki cień */
+    border: none;
+    overflow: hidden; /* Ważne dla zaokrągleń */
+}
+
+/* Kontener główny dla boxów */
+.container {
+    max-width: 900px;
+    margin: 50px auto 0 auto; /* Większy odstęp od mapy */
+    padding: 0 20px;
+}
+
+/* Kontener sugestii (formularz) */
+.suggestion-box {
+    background-color: var(--white);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px var(--shadow-soft);
+    padding: 45px; /* Większy padding */
+    border: 1px solid var(--light-border);
+    text-align: left;
+}
+
+h2 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 2.2em;
+    color: var(--secondary-teal);
+    margin-top: 0;
+    border-bottom: 2px solid var(--light-border); /* Grubsza, delikatna linia */
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.section-description { /* Styl dla opisu pod h2 w boxie */
+    text-align: center;
+    margin: -15px auto 35px auto; /* Przesunięcie w górę i większy margines dolny */
+    font-size: 1.1em;
+    color: var(--medium-text);
+}
+
+
+/* Formularz */
+.suggestion-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Większy odstęp między polami */
+}
+
+.suggestion-form label {
+    font-weight: 700;
+    margin-bottom: 8px; /* Większy odstęp od pola */
+    display: block;
+    color: var(--dark-text);
+    font-size: 1.1em;
+}
+
+.suggestion-form input[type="text"],
+.suggestion-form input[type="email"],
+.suggestion-form textarea {
+    width: 100%;
+    padding: 16px; /* Większy padding */
+    border: 1px solid var(--light-border);
+    border-radius: 10px; /* Zaokrąglone rogi */
+    font-size: 1em;
+    font-family: 'Lato', sans-serif;
+    color: var(--dark-text);
+    background-color: var(--background-grey); /* Delikatnie inny kolor tła pola */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.suggestion-form input[type="text"]:focus,
+.suggestion-form input[type="email"]:focus,
+.suggestion-form textarea:focus {
+    border-color: var(--primary-light-blue);
+    box-shadow: 0 0 0 4px rgba(161, 214, 226, 0.3); /* Subtelny, rozmyty cień */
+    outline: none;
+}
+
+.suggestion-form textarea {
+    resize: vertical;
+    min-height: 140px; /* Jeszcze większa wysokość pola tekstowego */
+}
+
+.suggestion-form button {
+    background-color: var(--secondary-teal);
+    color: var(--white);
+    padding: 18px 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: 700;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(107, 173, 193, 0.3); /* Subtelny cień */
+    letter-spacing: 0.8px;
+    margin-top: 15px; /* Odstęp od ostatniego pola */
+}
+
+.suggestion-form button:hover {
+    background-color: #5BA0B7; /* Nieznacznie ciemniejszy na hover */
+    transform: translateY(-3px); /* Wyraźniejsze podniesienie */
+    box-shadow: 0 8px 20px var(--shadow-strong);
+}
+
+.form-info {
+    font-size: 0.9em;
+    color: var(--medium-text);
+    text-align: center;
+    margin-top: 30px; /* Większy odstęp od przycisku */
+}
+
+/* Stopka */
+footer {
+    margin-top: auto;
+    padding: 25px;
+    background-color: var(--primary-light-blue); /* Pastelowe tło stopki */
+    color: var(--dark-text);
+    text-align: center;
+    font-size: 0.95em;
+    border-top: 1px solid var(--light-border);
+}
+
+footer a {
+    color: var(--dark-text);
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--white);
+}
+
+
+/* Responsywność dla mniejszych ekranów */
+@media (max-width: 768px) {
+    header {
+        padding: 30px 15px;
+        margin-bottom: 20px;
+    }
+    h1 {
+        font-size: 2.2em;
+    }
+    header p {
+        font-size: 1em;
+    }
+    #map {
+        height: 450px;
+        margin: 20px auto;
+        border-radius: 10px;
+    }
+    .container {
+        margin: 30px auto 0 auto;
+        padding: 0 15px;
+    }
+    .suggestion-box {
+        padding: 25px;
+        border-radius: 10px;
+    }
+    h2 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+    .section-description {
+        margin: -10px auto 25px auto;
+        font-size: 1em;
+    }
+    .suggestion-form {
+        gap: 20px;
+    }
+    .suggestion-form label {
+        font-size: 1em;
+    }
+    .suggestion-form input[type="text"],
+    .suggestion-form input[type="email"],
+    .suggestion-form textarea {
+        padding: 14px;
+        border-radius: 8px;
+    }
+    .suggestion-form textarea {
+        min-height: 100px;
+    }
+    .suggestion-form button {
+        padding: 14px 25px;
+        font-size: 1.1em;
+        border-radius: 8px;
+    }
+    .form-info {
+        margin-top: 20px;
+    }
+    footer {
+        padding: 20px;
+        font-size: 0.85em;
+    }
+}
