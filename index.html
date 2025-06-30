@@ -12,27 +12,28 @@
     <link rel="stylesheet" href="style.css">
 
     <!-- Dołączanie fontów Google Fonts dla nowoczesnego, czystego wyglądu -->
-    <!-- Quicksand dla nagłówków, Lato dla treści -->
+    <!-- Quicksand dla nagłówków, Lato dla treści. Upewnij się, że masz połączenie z internetem, aby je załadować. -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
         <h1>💧 Mapa Restauracji z Darmową Wodą</h1>
-        <p>Znajdź miejsca, gdzie bezpłatnie uzupełnisz swoją butelkę. Wspólnie budujmy świadomą i nawodnioną społeczność!</p>
+        <p>Znajdź miejsca, gdzie bezpłatnie otrzymasz wode do posiłku. Wspólnie budujmy świadomą i nawodnioną społeczność!</p>
     </header>
 
     <main>
-        <!-- Kontener, w którym zostanie załadowana mapa -->
+        <!-- Kontener, w którym zostanie załadowana mapa Leaflet -->
         <div id="map"></div>
 
-        <!-- Sekcja dla Użytkowników (formularz sugestii) -->
+        <!-- Sekcja dla Użytkowników z formularzem do zgłaszania nowych miejsc -->
         <div class="container">
             <div class="suggestion-box">
                 <h2>Zaproponuj nowe miejsce!</h2>
                 <p class="section-description">Znasz restaurację, kawiarnię lub inny punkt, który chętnie oferuje darmową wodę? Daj nam znać!</p>
                 
-                <!-- TUTAJ MUSISZ WSTAWIĆ SWÓJ ADRES URL Z FORMSPREE.IO -->
+                <!-- Formularz wysyłający dane do Formspree.io -->
+                <!-- PAMIĘTAJ: Adres URL w 'action' to Twój unikalny endpoint Formspree.io -->
                 <form action="https://formspree.io/f/xjkrlreo" method="POST" class="suggestion-form">
                     <label for="restaurant_name">Nazwa Miejsca:</label>
                     <input type="text" id="restaurant_name" name="Nazwa Miejsca" required>
@@ -46,7 +47,7 @@
                     <label for="user_email">Twój e-mail (opcjonalnie, do kontaktu):</label>
                     <input type="email" id="user_email" name="_replyto" placeholder="twój.email@example.com">
 
-                    <!-- Pole dla podstawowej ochrony przed spamem Formspree -->
+                    <!-- To pole jest dodawane przez Formspree dla podstawowej ochrony przed spamem, ukryte dla użytkownika -->
                     <input type="text" name="_gotcha" style="display:none" />
 
                     <button type="submit">Wyślij Sugestię</button>
@@ -60,112 +61,125 @@
         <p>&copy; 2023 Mapa Restauracji z Darmową Wodą. Projekt dla społeczności. | <a href="#" target="_blank">Polityka Prywatności</a></p>
     </footer>
 
-    <!-- Dołączanie biblioteki Leaflet.js (konieczne dla mapy) -->
+    <!-- Dołączanie biblioteki Leaflet.js (konieczne dla działania mapy) -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    <!-- Twój własny kod JavaScript -->
+    <!-- Twój własny kod JavaScript, który obsługuje mapę i markery -->
     <script>
         // 1. Inicjalizacja mapy
-        // Ustawienie domyślnego widoku mapy na centrum Poznania i odpowiedni zoom
-        var map = L.map('map').setView([52.40637, 16.92510], 14); // Współrzędne Placu Wolności w Poznaniu, zoom 14
+        // Ustawienie domyślnego widoku mapy na centrum Poznania i odpowiedni poziom powiększenia (zoom 14)
+        var map = L.map('map').setView([52.40637, 16.92510], 14); // Współrzędne Placu Wolności w Poznaniu
 
-        // 2. Dodanie kafelków mapowych (OpenStreetMap)
+        // 2. Dodanie kafelków mapowych z OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // 3. Niestandardowy marker - to jest ikona kropli wody!
+        // 3. Definicja niestandardowego markera (ikony kropli wody)
+        // Pamiętaj, że plik water_drop_marker.svg musi być w tym samym folderze co index.html
         var waterIcon = L.icon({
             iconUrl: 'water_drop_marker.svg', // Ścieżka do Twojego pliku SVG
-            iconSize: [35, 35], // Rozmiar ikony (szerokość, wysokość)
-            iconAnchor: [17, 35], // Punkt "zakotwiczenia" ikony (dolny środek kropli)
-            popupAnchor: [0, -30] // Punkt "zakotwiczenia" popupu względem ikony
+            iconSize: [35, 35], // Rozmiar ikony w pikselach (szerokość, wysokość)
+            iconAnchor: [17, 35], // Punkt "zakotwiczenia" ikony, odpowiadający za jej położenie względem współrzędnych (np. dół-środek)
+            popupAnchor: [0, -30] // Punkt "zakotwiczenia" wyskakującego okienka popup, względem ikony
         });
 
-        // 4. Dane o restauracjach (Tutaj Ty, jako właściciel, dodajesz/edytujesz swoje restauracje)
+        // 4. Dane o restauracjach (Tutaj Ty, jako właściciel, dodajesz/edytujesz nowe restauracje po weryfikacji)
         var restaurants = [
-            // Restauracje w Poznaniu
+            // Restauracje w Poznaniu (przykładowe punkty, ich współrzędne są przybliżone)
             { 
-                name: 'Zen On (Poznań)', 
+                name: 'Zen On', 
+                address: 'ul. Święty Marcin 26/4',
                 lat: 52.4172, 
                 lon: 16.9069, 
                 description: 'Wege/wegańska restauracja, często z darmową wodą do posiłku.' 
             },
             { 
-                name: 'Madara (Poznań)', 
+                name: 'Madara', 
+                address: 'ul. Szewska 20',
                 lat: 52.4137, 
                 lon: 16.9026, 
                 description: 'Bliskowschodnia kuchnia, miła obsługa, woda dostępna.' 
             },
             { 
-                name: 'Starg (Poznań)', 
+                name: 'Starg', 
+                address: 'ul. Stargardzka 4', // Zaktualizowany adres
                 lat: 52.4150, 
                 lon: 16.9000, 
                 description: 'Kawiarnia z kawą speciality i darmową wodą.' 
             },
             { 
-                name: 'Mówishmash (Poznań)', 
+                name: 'Mówishmash', 
+                address: 'ul. Garbary 49',
                 lat: 52.4004, 
                 lon: 16.9157, 
                 description: 'Pyszne hummasy, zawsze dbają o nawodnienie klientów.' 
             },
             { 
-                name: 'Trzecia Kawa (Poznań)', 
+                name: 'Trzecia Kawa', 
+                address: 'ul. Święty Marcin 42',
                 lat: 52.4077, 
                 lon: 16.9298, 
                 description: 'Przyjemna kawiarnia w centrum, uzupełnisz bidon.' 
             },
             { 
-                name: 'Mitte (Poznań)', 
+                name: 'Mitte', 
+                address: 'ul. Kościelna 24',
                 lat: 52.4087, 
                 lon: 16.9262, 
                 description: 'Modne miejsce, zapytaj o wodę do stolika.' 
             },
             { 
-                name: 'Tonari (Poznań)', 
+                name: 'Tonari', 
+                address: 'ul. Mielżyńskiego 20',
                 lat: 52.4069, 
                 lon: 16.9295, 
                 description: 'Japońska kuchnia, kulturalna obsługa chętnie polewa wodę.' 
             },
-            // Tutaj możesz dodawać więcej restauracji po ich weryfikacji.
+            // Dodaj więcej restauracji tutaj po ich weryfikacji.
             // PAMIĘTAJ O PRZECINKU PO KAŻDYM OBIECIE, OPRÓCZ OSTATNIEGO!
-            // { name: 'Nazwa Restauracji', lat: [szerokość_geograficzna], lon: [długość_geograficzna], description: 'Opis' },
+            // { name: 'Nazwa Restauracji', address: 'ul. Przykładowa 1', lat: [szerokość_geograficzna], lon: [długość_geograficzna], description: 'Opis' },
         ];
 
-        // 5. Dodawanie markerów dla każdej restauracji z niestandardową ikoną
+        // 5. Iteracja przez tablicę restauracji i dodawanie markerów na mapie z niestandardową ikoną
         restaurants.forEach(function(restaurant) {
             var marker = L.marker([restaurant.lat, restaurant.lon], {icon: waterIcon}).addTo(map);
+            // Zmieniony format popupu, aby uwzględniał adres
             marker.bindPopup(
                 "<b>" + restaurant.name + "</b><br>" + 
+                "Adres: " + (restaurant.address ? restaurant.address : "Brak adresu") + "<br>" +
                 (restaurant.description ? restaurant.description : "Brak szczegółowego opisu.")
             );
         });
 
         // 6. Funkcja do lokalizacji użytkownika (opcjonalne)
-        // Ta funkcja nadal działa, ale mapa początkowo jest już wyśrodkowana na Poznaniu.
-        // Jeśli użytkownik pozwoli na lokalizację, mapa przeskoczy do jego pozycji.
+        // Jeśli użytkownik pozwoli na lokalizację, mapa przeskoczy do jego pozycji,
+        // w przeciwnym razie pozostanie wyśrodkowana na Poznaniu.
         function onLocationFound(e) {
-            var radius = e.accuracy / 2;
+            var radius = e.accuracy / 2; // Określenie promienia dokładności lokalizacji
             L.marker(e.latlng).addTo(map)
                 .bindPopup("Jesteś w promieniu " + radius + " metrów od tego punktu").openPopup();
-            L.circle(e.latlng, radius).addTo(map);
-            map.setView(e.latlng, 14); // Ustaw widok mapy na Twoją lokalizację
+            L.circle(e.latlng, radius).addTo(map); // Dodanie okręgu pokazującego obszar dokładności
+            map.setView(e.latlng, 14); // Ustawienie widoku mapy na znalezioną lokalizację
         }
 
         function onLocationError(e) {
+            // Logowanie błędu do konsoli przeglądarki, niewidoczne dla użytkownika
             console.error("Błąd lokalizacji: " + e.message + ". Mapa pozostaje wyśrodkowana na Poznaniu.");
-            // Możesz dodać tutaj alert, jeśli chcesz, aby użytkownik był powiadamiany o błędzie lokalizacji.
+            // Możesz odkomentować poniższą linię, jeśli chcesz, aby użytkownik był powiadamiany o błędzie lokalizacji
             // alert("Nie udało się ustalić Twojej lokalizacji. Mapa jest wyśrodkowana na Poznaniu.");
         }
 
+        // Podpięcie funkcji obsługujących zdarzenia lokalizacji
         map.on('locationfound', onLocationFound);
         map.on('locationerror', onLocationError);
 
-        // Spróbuj zlokalizować użytkownika po załadowaniu mapy, ale bez zmiany domyślnego widoku,
+        // Wywołanie próby lokalizacji użytkownika po załadowaniu mapy, ale bez zmiany domyślnego widoku,
         // chyba że lokalizacja jest naprawdę dokładna.
         map.locate({setView: false, maxZoom: 16, enableHighAccuracy: true});
 
         // 7. Funkcja dla Ciebie (właściciela): po kliknięciu na mapie pokaże współrzędne
+        // Przydatne do łatwego pozyskiwania współrzędnych dla nowych punktów.
         var popup = L.popup();
 
         function onMapClick(e) {
@@ -177,7 +191,7 @@
                             "<br>Skopiuj i wklej do pliku `index.html`!")
                 .openOn(map);
         }
-        map.on('click', onMapClick);
+        map.on('click', onMapClick); // Podpięcie funkcji do zdarzenia kliknięcia na mapie
 
     </script>
 
